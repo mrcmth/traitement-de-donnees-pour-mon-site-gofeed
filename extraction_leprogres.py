@@ -82,23 +82,22 @@ def extract_keywords(text):
 
     return found_keywords, sujet
 
-# Fonction pour extraire les informations d'un article à partir de son lien
 def extract_information(url):
-    # Send a GET request to the URL
+ 
     response = requests.get(url)
 
     if response.status_code == 200:
-        # Parse the HTML content of the page
+       
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        # Find the article element
+      
         article = soup.find('article')
 
         title = ' '.join(article.find('h1').text.split()).strip()
         journal = "actu_leprogres"
         description_elements = article.find_all('div', class_='textComponent')
         description = '\n'.join([element.text.strip() for element in description_elements])
-        image_s_link = None  # Initialize with a default value
+        image_s_link = None  
 
         illustration_div = article.find('div', class_='illustration')
         if illustration_div:
@@ -123,7 +122,6 @@ def extract_information(url):
     else:
         print(f"Failed to fetch the webpage. Status code: {response.status_code}")
 
-# URL de la page principale
 main_url = "https://www.leprogres.fr/haute-loire"
 response = requests.get(main_url)
 
@@ -131,7 +129,6 @@ if response.status_code == 200:
     soup = BeautifulSoup(response.text, 'html.parser')
     articles = soup.find_all('article', class_='article')
 
-    # Liste pour stocker les liens extraits
     article_links = []
 
     for article in articles:
@@ -139,11 +136,9 @@ if response.status_code == 200:
         if article_link_tag:
             article_link = "https://www.leprogres.fr" + article_link_tag.get('href')
 
-            # Vérifier si le lien ne contient pas "https://boutique."
             if "https://boutique." not in article_link:
                 article_links.append(article_link)
 
-    # Appliquer la fonction extract_information à chaque lien extrait
     for link in article_links:
         print(f"\nExtracting information for article: {link}")
         extract_information(link)
