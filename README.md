@@ -125,3 +125,23 @@ Catégorie societe: 8.33 %
 ```
 
 Le "sujet probable" me permet de déterminer la dominante de l'article pour pouvoir le classer dans une catégorie spéciale de mon site.
+
+élément 5 : on traite l'image de l'article en enlevant le fond blanc, en compressant l'image, en générant une nouvelle adresse http de l'image car cette image est stockée dans mes propres serveurs. L'image traitée est donc directement téléversée en ssh à la db, seul le lien généré est inséré à la table sql.
+
+```python
+illustration_div = article.find('div', class_='illustration')
+        if illustration_div:
+            image_tag = illustration_div.find('img')
+            if image_tag and 'src' in image_tag.attrs:
+                img_link = image_tag['src']
+                image_s_link = "https://gofeed.fr" + img_traitement.remove_background_and_crop(img_link, journal)
+            else:
+                print("No image link found for this article.")
+        else:
+            print("No illustration div found for this article.")
+
+```
+
+Traitement de l'image : dispo en annexe
+
+et les éléments 6 et 7 dont l'heure et la date d'extraction.
