@@ -28,7 +28,7 @@ if response.status_code == 200:
         if article_link_tag:
             article_link = "https://www.leprogres.fr" + article_link_tag.get('href')
 ```
-On trie les liens, en effet ceux commençant par https://boutique. sont des articles publicitaires, donc pas intérressant à scraper.
+On trie les liens, en effet ceux commençant par https://boutique. sont des articles publicitaires, donc pas intéressant à scraper.
 
 ```python
             if "https://boutique." not in article_link:
@@ -223,7 +223,136 @@ CREATE TABLE IF NOT EXISTS actu_leprogres (
 
 Module de recherche du site : 
 
+Lorsqu'une recherche est lancée, avec un <form> utilisant GET, on vient chercher le fichier actualite.php qui charge une nouvelle page avec les résultats de la reherche qui a été mise dans le form :
+exemple de requête : https://gofeed.fr/actualite.php?recherche=informatique On voit bien que dans actualite.php?recherche={recherche} 'recherche' est le paramètre.
+
+```php
+<?php
+$page = "recherche";
+$recherche = $_GET['recherche'];
+?>
+```
+
+Hop, et ensuite dans un fichier php, on effectue une requête SQL pour afficher au maximum 100 résultats suite à la recherche : 
+
+On recherche parmi les tables (peut être amélioré en effctuant une boucle), comme vous le voyez on recherche parmi la description, le titre etc. Et on ordonne tous ces résultats par DATE (du plus récents au plus ancien) et par tendance.
+```php
+$sql = "SELECT 
+    *
+FROM (
+    SELECT 
+        *
+    FROM 
+        actu_actufr
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_dauphinelibere
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_france3region
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_lacommere43
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_lamontagne
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_leprogres
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_leveil
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+    UNION
+    SELECT 
+        *
+    FROM 
+        actu_zoomdici
+    WHERE 
+        title LIKE '%$recherche%'
+        OR description LIKE '%$recherche%'
+        OR journal LIKE '%$recherche%'
+        OR url LIKE '%$recherche%'
+        OR type LIKE '%$recherche%'
+        OR date_published LIKE '%$recherche%'
+        OR keywords_article LIKE '%$recherche%'
+) AS all_tables
+ORDER BY 
+    date_published DESC, 
+    trending_score DESC LIMIT 100;
 
 
 
+";
+```
 
+Je n'ai pas complètement fini la présentation mais si vous avez des questions je suis entièrment disponible. 
+marc.mathieu43@gmail.com
+07 82 09 84 76
