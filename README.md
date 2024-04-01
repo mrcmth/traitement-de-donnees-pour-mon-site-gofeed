@@ -145,3 +145,85 @@ illustration_div = article.find('div', class_='illustration')
 Traitement de l'image : dispo en annexe
 
 et les éléments 6 et 7 dont l'heure et la date d'extraction.
+
+## Partie 2, SQL, PHP :
+
+1. Commençons par la partie sur le SQL :
+
+L'entrée d'un article extrait dans la base de donnée passe par une requête python qui envoie les différentes données de l'article selon les colonnes : 
+
+L'insertion passe par une simple fonction try, except, finally :
+
+```python
+def insert_article(title, description, journal, url, type, date_published, heure, image_s_link, keywords, trend_score):
+    try:
+        mydb = mysql.connector.connect(
+            host="193.203.168.53",
+            user="u508202719_marc",
+            passwd= "Eh non, vous ne pourrez pas hacker ma base de donnée ☺",
+            database="u508202719_actu"
+        )
+
+        mycursor = mydb.cursor()
+
+        mycursor.execute(f"SELECT COUNT(*) FROM {journal} WHERE url = %s", (url,))
+        count = mycursor.fetchone()[0]
+
+        if count == 0:
+            sql = f"INSERT INTO {journal} (title, description, journal, url, type, date_published, heure_published, image_s_link, keywords_article, category, trending_score) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (
+                title,
+                description,
+                journal,
+                url,
+                type,
+                date_published,
+                heure,
+                image_s_link,
+                json.dumps(keywords[0]),
+                keywords[1][0],
+                trend_score
+            )
+            mycursor.execute(sql, val)
+            mydb.commit()
+            print(f"Article inséré avec succès dans la base de données. ID: {mycursor.lastrowid}")
+        else:
+            print(f"L'article avec l'URL {url} est déjà présent dans la base de données. Pas d'insertion.")
+
+    except mysql.connector.Error as err:
+        print("Une erreur s'est produite lors de l'insertion de l'article :", err)
+
+    finally:
+        if mycursor:
+            mycursor.close()
+        if mydb:
+            mydb.close()
+```
+EXPLICATION : avec le module mysql connector, on démarre une connexion à la db avec les identifiants, on sélectionne la table, et si la table existe on insert les données en écrivant la requête sql, on retrouve bien le langage sql avec INSERT INTO. Et après on met un petit message de réussite et on referme la connexion.
+
+Voici une requete SQL type pour créer une table pour y stocker les articles du Progrès : 
+On met simplement les éléments dont on a besoin, et on spécifie le type, donc pour la description on prend un varchar 255, pour la date on prend DATE et pour le trending score on prend INT car il s'agit d'une valeure chiffrée (+1 à chaque clics).
+
+```sql
+CREATE TABLE IF NOT EXISTS actu_leprogres (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    journal VARCHAR(255),
+    url VARCHAR(255) NOT NULL,
+    type VARCHAR(50),
+    date_published DATE,
+    heure_published TIME,  
+    image_s_link VARCHAR(255),
+    keywords_article VARCHAR(255),
+    category VARCHAR(255),
+    trending_score INT NOT NULL
+);
+```
+
+Module de recherche du site : 
+
+
+
+
+
