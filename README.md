@@ -496,7 +496,7 @@ Et vous verrez que l'article s'affichera tout en haut.
 
 Un peu de CSS :
 
-Vous pouvez remarquer qu'il y a souvent des classes css commune, c'est parce que je préfère appliquer un style aux élément directement, sans passer par des noms complexes. 
+Vous pouvez remarquer qu'il y a souvent des classes css commune, c'est parce que je préfère appliquer un style aux éléments directement, sans passer par des noms complexes. 
 Exemple : Je trouve bien plus pratique d'écrire : 
 ```
 <article class="margin-top-10 width-12 bbrr bblr"
