@@ -1,5 +1,8 @@
 # Je vous présente les grandes lignes du fonctionnement de mon site gofeed.fr
 
+//// ATTENTION : La barre de recherche dans le header ne fonctionne pas dans la version mobile (problème de javascript), elle est uniquement fonctionnelle pour la version ordinateur.
+
+
 Cette présentation se scinde en plusieurs parties :
 
 1. Partie 1 (Python) qui se concentre sur l'extraction, le traitement et l'envoie de l'article de presse à la base de donnée.
