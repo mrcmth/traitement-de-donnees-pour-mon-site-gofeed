@@ -10,7 +10,7 @@ Cette présentation se scinde en plusieurs parties :
 
 ## Partie 1, traitement de données : 
 
-1. "Scraping" des articles de presses, dans notre cas je vous montre comment j'ai fais pour le site leprogres.fr
+1. "Scraping" des articles de presses, dans notre cas je vous montre comment j'ai fait pour le site leprogres.fr
 
   1.1 INTRO :
 
@@ -39,7 +39,7 @@ On trie les liens, en effet ceux commençant par https://boutique. sont des arti
 
 ```
 
-et pour chaque articles déniché, on commence le traitement.
+et pour chaque articles dénichés, on commence le traitement.
 
 ```python
     for link in article_links:
@@ -70,11 +70,11 @@ simplement extrait via beautiful soup
 
 élément 4 : Les mots clés ! 
 
-extract_keywords() se sert d'un fichier json (que je vous mets en annexe : motCle.json) pour déterminer les mots clés d'un articles. Il prend en entré le contenu textuel de l'article.
+extract_keywords() se sert d'un fichier json (que je vous mets en annexe : motCle.json) pour déterminer les mots clés d'un articles. Il prend en entrée le contenu textuel de l'article.
 
 Exemple : "Marc aimerait travailler dans le domaine de l'informatique. Pour cela il postule dans différents masters via la platefome monMaster"
 
---> Dans le json, il y a les mots "travailler", "postuler" qui sont relié au mot clé : "professionnel". Il y a aussi les mots "master" et "monMaster" relié au mot clé "enseignement supérieur". Donc on a 2 mots clés pour cet article, ainsi si on remarque qu'un utilisateur lit beaucoup d'article sur l'éducation, le monde du travail, alors il est pertinent de lui proposer cet article.
+--> Dans le json, il y a les mots "travailler", "postuler" qui sont reliés au mot clé : "professionnel". Il y a aussi les mots "master" et "monMaster" relié au mot clé "enseignement supérieur". Donc on a 2 mots clés pour cet article, ainsi si on remarque qu'un utilisateur lit beaucoup d'article sur l'éducation, le monde du travail, alors il est pertinent de lui proposer cet article.
 
 ```python
 
